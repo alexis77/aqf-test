@@ -1,19 +1,37 @@
 {{ form_start(form) }}
 <div>
-    <div>{{ form_label(form.name) }} {{ form_widget(form.name) }} </div>
-    <div>{{ form_label(form.startDate) }} -
-        {{ form_widget(form.startDate) }} {{ form_widget(form.endDate) }}
+    <div class="form-group row">
+        {{ form_label(form.name, null , {'label_attr': {'class': 'col-sm-2 col-form-label'}}) }}
+        <div class="col-sm-4">
+            {{ form_widget(form.name, {'attr': {'class': 'form-control form-control-sm'}}) }}
+        </div>
     </div>
-    <div>
-        {{ form_label(form.productName) }} {{ form_widget(form.productName) }} |
-        {{ form_label(form.vendorName) }} {{ form_widget(form.vendorName) }} |
-        {{ form_label(form.vendorEmail) }} {{ form_widget(form.vendorEmail) }}
+
+    <div class="form-group row">
+        {{ form_label(form.startDate, null , {'label_attr': {'class': 'col-sm-2 col-form-label'}}) }}
+        <div class="row">
+            <div class="col-sm-4">
+                {{ form_widget(form.startDate, {'attr': {'class': 'form-control form-control-sm'}}) }}
+            </div>
+            <div class="col-sm-4">
+                {{ form_widget(form.endDate, {'attr': {'class': 'form-control form-control-sm'}}) }}
+            </div>
+        </div>
     </div>
-    <div>
-        {{ form_label(form.destinationCountry) }} {{ form_widget(form.destinationCountry) }}
-    </div>
+
+    {% for child in form %}
+        {% if child.rendered is same as (false) %}
+            <div class="form-group row">
+
+                {{ form_label(child, null , {'label_attr': {'class': 'col-sm-2 col-form-label'}}) }}
+                <div class="col-sm-4">
+                    {{ form_widget(child, {'attr': {'class': 'form-control form-control-sm'}}) }}
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
     {{ form_widget(form) }}
-    <button class="btn" formmethod="get">{{ button_label|default('Save') }}</button>
+    <button class="btn btn-primary" formmethod="get">{{ button_label|default('Save') }}</button>
 </div>
 
 {{ form_end(form) }}

@@ -4,10 +4,19 @@
 
 {% block body %}
     <h1>Edit Mission</h1>
-
     {{ include('mission/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('mission_list') }}">back to list</a>
+    <br>
+    <div class="row">
+        <div class="col-md-2">
+            <a class="btn btn-default" href="{{ path('mission_list') }}">back to list</a>
+        </div>
+        <div class="col-md-2">
+            <div class="col-md-2">
+                <a class="btn btn-danger" href="{{ path('mission_delete', {'id': mission.id}) }}">delete</a>
+            </div>
+        </div>
+    </div>
 
-    {{ include('mission/_delete_form.html.twig') }}
+
 {% endblock %}

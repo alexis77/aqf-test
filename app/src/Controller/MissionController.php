@@ -101,7 +101,7 @@ class MissionController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="mission_delete", methods={"DELETE"})
+     * @Route("/{id}/delete", name="mission_delete", methods={"DELETE", "GET"})
      * @IsGranted({"ROLE_CLIENT", "ROLE_ADMIN"})
      * @IsGranted("MISSION_DELETE", subject="mission")
      */
@@ -111,9 +111,12 @@ class MissionController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($mission);
             $entityManager->flush();
+            return $this->redirectToRoute('mission_list');
         }
 
-        return $this->redirectToRoute('mission_list');
+        return $this->render('mission/delete.html.twig', [
+            'mission' => $mission
+        ]);
     }
 
     private function getFilterParameters($parameters)
