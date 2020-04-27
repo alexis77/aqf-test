@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Mission;
+use App\Form\FilterType;
 use App\Form\MissionType;
 use App\Repository\MissionRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,10 +23,20 @@ class MissionController extends AbstractController
      * @Route("/", name="mission_list", methods={"GET"})
      * @IsGranted({"ROLE_CLIENT", "ROLE_ADMIN"})
      */
-    public function index(MissionRepository $missionRepository): Response
+    public function index(MissionRepository $missionRepository, Request $request, PaginatorInterface $pagination): Response
     {
+        $criteria = $this->getFilterParameters($request->query->get('filter'));
+        $form = $this->createForm(FilterType::class, $criteria, ['method' => 'GET']);
+
+        $result = $pagination->paginate(
+            $missionRepository->findAllByCriteria($criteria),
+            $request->query->getInt('page', 1),
+            $this->getParameter('search.limit')
+        );
+
         return $this->render('mission/index.html.twig', [
-            'missions' => $missionRepository->findAll(),
+            'missions' => $result,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -39,6 +51,9 @@ class MissionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Easy way to do without using HiddenFormType
+            $mission->setClient($this->getUser());
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($mission);
             $entityManager->flush();
@@ -99,5 +114,23 @@ class MissionController extends AbstractController
         }
 
         return $this->redirectToRoute('mission_list');
+    }
+
+    private function getFilterParameters($parameters)
+    {
+        $criteria = $parameters ?: [];
+
+        if ($this->isGranted(['ROLE_CLIENT'])) {
+            $criteria['client'] = true;
+        }
+        if (!empty($criteria['startDate'])) {
+            $criteria['startDate'] = \DateTime::createFromFormat('Y-m-d', $criteria['startDate']);
+        }
+
+        if (!empty($criteria['endDate'])) {
+            $criteria['endDate'] = \DateTime::createFromFormat('Y-m-d', $criteria['endDate']);
+        }
+
+        return array_filter($criteria);
     }
 }

@@ -4,40 +4,31 @@
 
 {% block body %}
     <h1>Mission index</h1>
-
+    {{ include('mission/_filter_form.html.twig', {'button_label': 'Search'}) }}
     <table class="table">
         <thead>
-            <tr>
-                <th>Id</th>
-                {% if is_granted('ROLE_CLIENT') %}
-                    <th>CLIENT</th>
-                {% endif %}
-                <th>Service date</th>
-                <th>Product name</th>
-                <th>Quantity</th>
-                <th>Destination country</th>
-                <th>Vendor ame</th>
-                <th>Vendor email</th>
-                <th>actions</th>
-            </tr>
+        <tr>
+            {% if is_granted(['ROLE_ADMIN']) %}
+                <th>CLIENT</th>
+            {% endif %}
+            <th>Service date</th>
+            <th>Product name</th>
+            <th>Vendor name</th>
+        </tr>
         </thead>
         <tbody>
         {% for mission in missions %}
             <tr>
-                <td>{{ mission.id }}</td>
-                {% if is_granted('ROLE_CLIENT') %}
-                    <td>trst</td>
+                {% if is_granted(['ROLE_ADMIN']) %}
+                    <td>{{ mission.client.username }}</td>
                 {% endif %}
-                <td>{{ mission.serviceDate ? mission.serviceDate.format('Y-m-d') : '' }}</td>
-                <td>{{ mission.productName }}</td>
-                <td>{{ mission.quantity }}</td>
-                <td>{{ mission.destinationCountry }}</td>
-                <td>{{ mission.vendorName }}</td>
-                <td>{{ mission.vendorEmail }}</td>
                 <td>
-                    <a href="{{ path('mission_show', {'id': mission.id}) }}">show</a>
-                    <a href="{{ path('mission_update', {'id': mission.id}) }}">edit</a>
+                    <a href="{{ path('mission_show', {'id': mission.id}) }}">
+                        {{ mission.serviceDate ? mission.serviceDate.format('Y-m-d') : '' }}
+                    </a>
                 </td>
+                <td><a href="{{ path('mission_show', {'id': mission.id}) }}">{{ mission.productName }}</a></td>
+                <td>{{ mission.vendorName }}</td>
             </tr>
         {% else %}
             <tr>
@@ -46,6 +37,9 @@
         {% endfor %}
         </tbody>
     </table>
-
+    {# display navigation #}
+    <div class="navigation">
+        {{ knp_pagination_render(missions) }}
+    </div>
     <a href="{{ path('mission_create') }}">Create new</a>
 {% endblock %}

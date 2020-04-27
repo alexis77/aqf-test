@@ -1,0 +1,19 @@
+{{ form_start(form) }}
+<div>
+    <div>{{ form_label(form.name) }} {{ form_widget(form.name) }} </div>
+    <div>{{ form_label(form.startDate) }} -
+        {{ form_widget(form.startDate) }} {{ form_widget(form.endDate) }}
+    </div>
+    <div>
+        {{ form_label(form.productName) }} {{ form_widget(form.productName) }} |
+        {{ form_label(form.vendorName) }} {{ form_widget(form.vendorName) }} |
+        {{ form_label(form.vendorEmail) }} {{ form_widget(form.vendorEmail) }}
+    </div>
+    <div>
+        {{ form_label(form.destinationCountry) }} {{ form_widget(form.destinationCountry) }}
+    </div>
+    {{ form_widget(form) }}
+    <button class="btn" formmethod="get">{{ button_label|default('Save') }}</button>
+</div>
+
+{{ form_end(form) }}
