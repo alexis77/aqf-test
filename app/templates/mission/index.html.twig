@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mission index{% endblock %}
+
+{% block body %}
+    <h1>Mission index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                {% if is_granted('ROLE_CLIENT') %}
+                    <th>CLIENT</th>
+                {% endif %}
+                <th>Service date</th>
+                <th>Product name</th>
+                <th>Quantity</th>
+                <th>Destination country</th>
+                <th>Vendor ame</th>
+                <th>Vendor email</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for mission in missions %}
+            <tr>
+                <td>{{ mission.id }}</td>
+                {% if is_granted('ROLE_CLIENT') %}
+                    <td>trst</td>
+                {% endif %}
+                <td>{{ mission.serviceDate ? mission.serviceDate.format('Y-m-d') : '' }}</td>
+                <td>{{ mission.productName }}</td>
+                <td>{{ mission.quantity }}</td>
+                <td>{{ mission.destinationCountry }}</td>
+                <td>{{ mission.vendorName }}</td>
+                <td>{{ mission.vendorEmail }}</td>
+                <td>
+                    <a href="{{ path('mission_show', {'id': mission.id}) }}">show</a>
+                    <a href="{{ path('mission_update', {'id': mission.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('mission_create') }}">Create new</a>
+{% endblock %}
