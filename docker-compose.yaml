@@ -7,8 +7,9 @@ services:
                 args:
                     - timezone=${TZ}
             volumes:
-                - ./app:/srv:rw
-                - ./app/var/log:/srv/var/log
+                - ./app:/srv:delegated
+                - ./app/var/log:/srv/var/log:rw
+                - ~/.composer/docker-cache/:/root/.composer:cached
             env_file:
                 - .env
             environment:

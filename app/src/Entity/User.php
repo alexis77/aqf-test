@@ -143,6 +143,11 @@ class User implements UserInterface
         return $this->getUsername();
     }
 
+    public function ownsMission(Mission $mission): bool
+    {
+        return $this->missions->contains($mission);
+    }
+
     public function addMission(Mission $mission): self
     {
         if (!$this->missions->contains($mission)) {
