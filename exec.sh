@@ -7,9 +7,9 @@ case "$1" in
   install)
     docker-compose build &&
     docker-compose up -d &&
-    docker-compose exec afq_app chown -R www-data:1000 var &&
-    docker-compose exec -u www-data afq_app composer install &&
-    docker-compose exec afq_app bin/console doctrine:migrations:migrate --no-interaction
+    docker exec -it afq_app chown -R www-data:1000 var &&
+    docker exec -it -u www-data afq_app composer install &&
+    docker exec -it afq_app ./bin/console doctrine:migrations:migrate --no-interaction
     ;;
   up)
     docker-compose up -d
@@ -19,9 +19,9 @@ case "$1" in
     ;;
   console)
     shift
-    docker-compose exec afq_app bin/console $@
+    docker exec afq_app ./bin/console $@
     ;;
-  console)
+  phpunit)
     shift
     docker-compose exec afq_app bin/phpunit $@
     ;;

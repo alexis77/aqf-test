@@ -22,6 +22,12 @@
       $ cp .env.dist .env
       ``` 
     You can change the Docker `.env` file according to your needs. The `NGINX_HOST` environment variable allows you to use a custom server name.
+    
+    MYSQL port is bind to port 3306 in your local, please change in docker-compose.yml if necessary:
+    ```
+    3306:3006
+    ```
+    
 
 3. Add the server name in your system host file and flush your [DNS cache](https://www.hostinger.com/tutorials/how-to-flush-dns)
 
