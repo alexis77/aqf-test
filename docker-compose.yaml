@@ -1,0 +1,55 @@
+version: '3'
+
+services:
+        app:
+            container_name: afq_app
+            build:
+                context: ./docker/app
+                args:
+                    - timezone=${TZ}
+            volumes:
+                - ./app:/srv:delegated
+                - ./app/var/log:/srv/var/log:rw
+                - ~/.composer/docker-cache/:/root/.composer:cached
+            env_file:
+                - .env
+            environment:
+                PHP_IDE_CONFIG: serverName=${NGINX_HOST}
+            depends_on:
+                - mysql
+        nginx:
+            container_name: afq_nginx
+            build:
+                context: ./docker/nginx
+                args:
+                    - nginx_host=${NGINX_HOST}
+            ports:
+                - "8080:80"
+                - "443:443"
+            depends_on:
+                - app
+            volumes:
+                - ./app/public:/srv/public:ro
+                - ./docker/nginx/default.template:/etc/nginx/conf.d/default.template
+                - nginx_log:/var/log/nginx
+            env_file:
+                - .env
+            command: /bin/bash -c "envsubst '$$NGINX_HOST'
+                < /etc/nginx/conf.d/default.template
+                > /etc/nginx/conf.d/default.conf
+                && exec nginx -g 'daemon off;'"
+
+        mysql:
+            container_name: afq_mysql
+            build:
+                context: ./docker/db
+                dockerfile: Dockerfile.mysql
+            volumes:
+                - ./.data/mysql:/var/lib/mysql:rw
+            env_file:
+                - .env
+            ports:
+                - "3306:3306"
+volumes:
+    app_log:
+    nginx_log:

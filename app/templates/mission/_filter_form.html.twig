@@ -1,0 +1,41 @@
+{{ form_start(form, {'attr': {'id': 'filter-form', 'class': 'collapse in'}}) }}
+<a class="btn col-sm-offset-11" data-toggle="collapse" data-target="#filter-container" aria-expanded="false"
+   aria-controls="filter-container">Toggle</a>
+<div id="filter-container" class="collapse in">
+    {% if form.name is defined %}
+        <div class="form-group row">
+            {{ form_label(form.name, null , {'label_attr': {'class': 'col-sm-2 col-form-label'}}) }}
+            <div class="col-sm-4">
+                {{ form_widget(form.name, {'attr': {'class': 'form-control form-control-sm'}}) }}
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="form-group row">
+        {{ form_label(form.startDate, null , {'label_attr': {'class': 'col-sm-2 col-form-label'}}) }}
+        <div class="row">
+            <div class="col-sm-4">
+                {{ form_widget(form.startDate, {'attr': {'class': 'form-control form-control-sm'}}) }}
+            </div>
+            <div class="col-sm-4">
+                {{ form_widget(form.endDate, {'attr': {'class': 'form-control form-control-sm'}}) }}
+            </div>
+        </div>
+    </div>
+
+    {% for child in form %}
+        {% if child.rendered is same as (false) %}
+            <div class="form-group row">
+
+                {{ form_label(child, null , {'label_attr': {'class': 'col-sm-2 col-form-label'}}) }}
+                <div class="col-sm-4">
+                    {{ form_widget(child, {'attr': {'class': 'form-control form-control-sm'}}) }}
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+    {{ form_widget(form) }}
+    <button class="btn btn-primary" formmethod="get">{{ button_label|default('Save') }}</button>
+</div>
+
+{{ form_end(form) }}
