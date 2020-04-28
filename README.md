@@ -45,13 +45,6 @@
     $ ./exec.sh install
     ```
 
-7. Composer install
-
-    first, configure permissions on `symfony/var` folder
-    ```bash
-    $ docker-compose exec app chown -R www-data:1000 var
-    ```
-
 ## Access the application
 
 You can access the application in HTTP:
