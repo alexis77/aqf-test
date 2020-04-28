@@ -29,7 +29,12 @@
     ```
     
 
-3. Add the server name in your system host file and flush your [DNS cache](https://www.hostinger.com/tutorials/how-to-flush-dns)
+3. Add the server name in your system hosts file and flush your [DNS cache](https://www.hostinger.com/tutorials/how-to-flush-dns)
+
+    Under Linux, please edit `/etc/hosts`. By default, please add the following
+    ```
+    127.0.0.1	aqf.localhost
+    ```
 
 4. Copy the `app/.env.dist` file to `app/.env`
     ```bash
@@ -46,10 +51,6 @@
     ```bash
     $ docker-compose exec app chown -R www-data:1000 var
     ```
-    then
-    ```bash
-    $ docker-compose exec -u www-data app composer install
-    ```
 
 ## Access the application
 
@@ -57,7 +58,14 @@ You can access the application in HTTP:
 [http://aqf.localhost:8080](http://aqf.localhost:8080)
 [http://127.0.0.1:8080](http://127.0.0.1:8080)
 
-**Note:** `symfony-docker.localhost` is the default server name. You can customize it in the `.env` file with `NGINX_HOST` variable.
+Accounts
+```
+admin@aqf.com | test
+client1@aqf.com | test
+client2@aqf.com | test
+```
+
+**Note:** `aqf.localhost` is the default server name. You can customize it in the `.env` file with `NGINX_HOST` variable.
 
 ## Commands
 
