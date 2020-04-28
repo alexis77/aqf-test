@@ -10,6 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
 class Mission
 {
     /**
+     * Note: We could have also use UUID, @see User.php
+     * The use of incremental Ids makes testing easier
+     *
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -51,6 +54,7 @@ class Mission
      * @ORM\Column(type="string", length=255)
      */
     private $vendorEmail;
+
 
     public function getId(): ?int
     {

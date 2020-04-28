@@ -15,6 +15,7 @@
         {% endif %}
 
         <h2 class="form-signin-heading">Please login</h2>
+
         <input type="text" value="{{ last_username }}" name="username" id="inputUsername" placeholder="Username / Email"
                class="form-control " required autofocus>
         <input type="password" name="password" id="inputPassword" placeholder="Password" class="form-control" required>
@@ -22,8 +23,6 @@
         <input type="hidden" name="_csrf_token"
                value="{{ csrf_token('authenticate') }}">
 
-        <button class="btn btn-primary" type="submit">
-            Sign in
-        </button>
+        <button class="btn btn-primary btn-block" type="submit">Sign in</button>
     </form>
 {% endblock %}

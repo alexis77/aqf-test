@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Mission;
+use App\Entity\User;
 use App\Form\FilterType;
 use App\Form\MissionType;
 use App\Repository\MissionRepository;
@@ -123,8 +124,8 @@ class MissionController extends AbstractController
     {
         $criteria = $parameters ?: [];
 
-        if ($this->isGranted(['ROLE_CLIENT'])) {
-            $criteria['client'] = true;
+        if ($this->isGranted([User::ROLE_CLIENT])) {
+            $criteria['isClient'] = true;
         }
         if (!empty($criteria['startDate'])) {
             $criteria['startDate'] = \DateTime::createFromFormat('Y-m-d', $criteria['startDate']);

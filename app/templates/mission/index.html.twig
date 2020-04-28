@@ -39,6 +39,7 @@
     </table>
     {# display navigation #}
     <div class="navigation">
+        <span>Total: {{ missions.getTotalItemCount() }}</span>
         {{ knp_pagination_render(missions) }}
     </div>
 {% endblock %}

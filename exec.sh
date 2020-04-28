@@ -4,6 +4,15 @@ ID=$(id -u)
 
 case "$1" in
 
+  build)
+    docker-compose build
+    ;;
+  up)
+    docker-compose up -d
+    ;;
+  stop)
+    docker-compose stop
+    ;;
   console)
     shift
     docker-compose exec app bin/console $@

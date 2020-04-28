@@ -50,6 +50,20 @@ body {
   font-size: 21px;
 }
 
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-signin input {
+  margin: 5px 0px;
+}
+
+#filter-form {
+  padding: 10px;
+  background-color: #ececec;
+}
+
 /* Supporting marketing content */
 .marketing {
   margin: 40px 0;

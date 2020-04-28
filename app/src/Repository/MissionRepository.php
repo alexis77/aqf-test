@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Mission;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -17,17 +18,14 @@ use Symfony\Component\Security\Core\Security;
  */
 class MissionRepository extends ServiceEntityRepository
 {
-    private $params;
-    private $user;
+    private $security;
 
     public function __construct(
         ManagerRegistry $registry,
-        ContainerBagInterface $params,
         Security $security
     ) {
         parent::__construct($registry, Mission::class);
-        $this->params = $params;
-        $this->user = $security->getUser();
+        $this->security = $security;
     }
 
     // /**
@@ -47,7 +45,7 @@ class MissionRepository extends ServiceEntityRepository
 
     private function searchByCriteria(QueryBuilder $qb, array $criteria)
     {
-        if (!empty($criteria['client'])) {
+        if (!empty($criteria['isClient'])) {
             $this->filterByCurrentUser($qb);
         }
 
@@ -56,8 +54,7 @@ class MissionRepository extends ServiceEntityRepository
         }
 
         if (!empty($criteria['name'])) {
-            $qb->leftJoin('m.client', 'u')
-                ->andWhere($qb->expr()->like('u.username', $qb->expr()->literal('%'.$criteria['name'].'%')));
+            $this->filterByClientName($qb, $criteria);
         }
 
         if (!empty($criteria['productName'])) {
@@ -80,10 +77,10 @@ class MissionRepository extends ServiceEntityRepository
     private function filterByCurrentUser(QueryBuilder $qb): void
     {
         $qb->where('m.client = :clientId')
-            ->setParameter('clientId', (string)$this->user->getId());
+            ->setParameter('clientId', (string)$this->security->getUser()->getId());
     }
 
-    private function filterByDate(QueryBuilder $qb, array $criterias)
+    private function filterByDate(QueryBuilder $qb, array $criteria): void
     {
         if (!empty($criteria['startDate'])) {
             $qb->andWhere($qb->expr()->gte('m.serviceDate', $qb->expr()->literal($criteria['startDate']->format('Y-m-d'))));
@@ -91,6 +88,14 @@ class MissionRepository extends ServiceEntityRepository
 
         if (!empty($criteria['endDate'])) {
             $qb->andWhere($qb->expr()->lte('m.serviceDate', $qb->expr()->literal($criteria['endDate']->format('Y-m-d'))));
+        }
+    }
+
+    private function filterByClientName(QueryBuilder $qb, array $criteria): void
+    {
+        if ($this->security->isGranted([User::ROLE_ADMIN])) {
+            $qb->leftJoin('m.client', 'u')
+                ->andWhere($qb->expr()->like('u.username', $qb->expr()->literal('%'.$criteria['name'].'%')));
         }
     }
 }
