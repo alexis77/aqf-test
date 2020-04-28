@@ -15,7 +15,7 @@
 
 1. Clone this repository
     ```bash
-    $ https://github.com/alexis77/aqf-test.git
+    $ git clone https://github.com/alexis77/aqf-test.git
     ```
 2. Copy the `.env.dist` file to `.env`
       ```bash
@@ -32,10 +32,6 @@
 6. Build & run containers with `docker-compose` by using the exec.sh file
     ```bash
     $ ./exec.sh install
-    ```
-    then
-    ```bash
-    $ ./exec.sh install  
     ```
 
 7. Composer install
